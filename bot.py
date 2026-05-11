@@ -1,11 +1,8 @@
 # Copyright 2024 Qewertyy, MIT License
 
-import uvloop
-uvloop.install()
-import datetime,logging, sys
+import datetime, logging
 from pyrogram import Client
 from config import Config
-import httpx
 
 # Get logging configurations
 logging.basicConfig(
@@ -13,11 +10,13 @@ logging.basicConfig(
     handlers=[logging.FileHandler("logs.txt"), logging.StreamHandler()],
     level=logging.INFO,
 )
+
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 logging.getLogger("httpx").setLevel(logging.WARNING)
-LOGGER = logging.getLogger(__name__)
 
+LOGGER = logging.getLogger(__name__)
 StartTime = datetime.datetime.now()
+
 
 class Bot(Client):
     def __init__(self):
@@ -28,13 +27,16 @@ class Bot(Client):
             bot_token=Config.BOT_TOKEN,
             plugins=dict(root="modules"),
         )
+
     async def start(self):
         await super().start()
         LOGGER.info("Bot Started")
 
-    async def stop(self):
+    async def stop(self, *args):
         await super().stop()
         LOGGER.info("Stopped Services")
 
+
 if __name__ == "__main__":
-    Bot().run()
+    bot = Bot()
+    bot.run()
